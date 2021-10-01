@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import TimeTable from './components/TimeTable'
+import TimeTable from './components/TimeTable.vue'
 
 @Component({
   components: {
@@ -24,3 +24,5 @@ export default class App extends Vue {}
   color: #2c3e50;
 }
 </style>
+
+<style scoped></style>

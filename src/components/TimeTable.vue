@@ -1,17 +1,19 @@
 <template>
-  <div class="time-table-conteiner">
-    <h1>2021 3Q</h1>
-    <Week :week="weekDays[0]"/>
+  <div class="time-table-container">
+    <WeekHeader />
+    <Week v-for="(week, id) in weekDays" :key="id" :week="week" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Week from './Week'
+import Week from './Week.vue'
+import WeekHeader from './WeekHeader.vue'
 
 @Component({
   components: {
     Week,
+    WeekHeader,
   },
 })
 export default class TimeTable extends Vue {
