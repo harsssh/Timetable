@@ -57,8 +57,8 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">キャンセル</el-button>
-        <el-button type="primary" @click="editSubmit">登録</el-button>
+        <el-button type="danger" @click='deleteData'>削除</el-button>
+        <el-button type="primary" @click="editSubmit">更新</el-button>
       </span>
     </el-dialog>
   </div>
@@ -94,10 +94,19 @@ export default class CourseCard extends Vue {
     this.$emit('update:url', this.editForm.url)
 
     this.dialogVisible = false
+
+    this.$message({
+      message: '講義情報を更新しました。',
+      type: 'success'
+    })
   }
 
   joinZoom(): void {
     window.open(this.url, '_blank')
+  }
+
+  deleteData(): void {
+    this.$emit('delete')
   }
 }
 </script>

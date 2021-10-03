@@ -15,6 +15,7 @@
             :room.sync="courses.period1.room"
             :instructor.sync="courses.period1.instructor"
             :url.sync="courses.period1.url"
+            @delete='deleteData("period1")'
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period1')"></i>
         </div>
@@ -28,6 +29,7 @@
             :room="courses.period3.room"
             :instructor="courses.period3.instructor"
             :url="courses.period3.url"
+            @delete='deleteData("period3")'
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
         </div>
@@ -41,6 +43,7 @@
             :room="courses.period5.room"
             :instructor="courses.period5.instructor"
             :url="courses.period5.url"
+            @delete='deleteData("period5")'
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period5')"></i>
         </div>
@@ -54,6 +57,7 @@
             :room="courses.period7.room"
             :instructor="courses.period7.instructor"
             :url="courses.period7.url"
+            @delete='deleteData("period7")'
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period7')"></i>
         </div>
@@ -62,7 +66,7 @@
 
     <el-dialog title="講義情報" :visible.sync="dialogVisible">
       <el-form :model="form">
-        <el-form-item label="科目名">
+        <el-form-item label="講義名">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -81,7 +85,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">キャンセル</el-button>
-        <el-button type="primary" @click="submit">登録</el-button>
+        <el-button type="primary" @click="submit">追加</el-button>
       </span>
     </el-dialog>
   </div>
@@ -91,13 +95,15 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import CourseCard from './CourseCard.vue'
 
+interface Keys {
+  name: string
+  room: string
+  instructor: string
+  url: string
+}
+
 interface CourseData {
-  [key: string]: {
-    name: string
-    room: string
-    instructor: string
-    url: string
-  }
+  [key: string]: Keys
 }
 
 @Component({
@@ -118,7 +124,7 @@ export default class Day extends Vue {
     room: '',
     instructor: '',
     url: '',
-  }
+  } as Keys
 
   editing = ''
   courses: CourseData = {}
@@ -133,20 +139,37 @@ export default class Day extends Vue {
   }
 
   submit(): void {
-    Object.keys(this.form).forEach((key) => {
-      if (key === 'url') return
+    if(this.form.name === '') this.form.name = '未設定'
+    if(this.form.room === '') this.form.room = '未設定'
+    if(this.form.instructor === '') this.form.instructor = '未設定'
 
-      if (this.form[key] === '') this.form[key] = '未設定'
-    })
-
-    this.courses[this.editing] = this.form
-
-    this.editing = ''
+    this.courses[this.editing] = { ...this.form }
+    
     this.dialogVisible = false
+    this.editing = ''
+
+    this.form.name = ''
+    this.form.room = ''
+    this.form.instructor = ''
+    this.form.url = ''
+
+    this.$message({
+      message: '講義が追加されました。',
+      type: 'success'
+    })
   }
 
   existData(period: string): boolean {
     return period in this.courses
+  }
+
+  deleteData(period: string): void {
+    this.$delete(this.courses, period)
+
+    this.$message({
+      message: '講義が削除されました。',
+      type: 'success'
+    })
   }
 }
 </script>
@@ -182,7 +205,7 @@ $hover-blue: #49a4ff;
   justify-content: center;
   align-items: center;
 
-  min-height: 195px;
+  min-height: 150px;
 }
 
 .content-container {

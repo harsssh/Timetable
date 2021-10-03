@@ -1,6 +1,5 @@
 <template>
   <div class="time-table-container">
-    <h1>2021 3Q</h1>
     <DayHeader />
     <Day v-for="day in days" :key="day" :day="day" />
   </div>
