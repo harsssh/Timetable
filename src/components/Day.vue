@@ -7,27 +7,68 @@
         </div>
       </el-col>
 
+
       <el-col :span="5">
         <div class="content-container bg-purple-light">
-          <CourseCard />
+          <CourseCard
+            name="科目名"
+            room="H000"
+            instructor="野村 千咲"
+            url="https://google.com"
+          />
         </div>
       </el-col>
+
       <el-col :span="5">
         <div class="content-container bg-purple">
-          <i class="add el-icon-plus"></i>
+          <CourseCard v-if="existData('period3')"
+                      :name='courses.period3.name'
+                      :room='courses.period3.room'
+                      :instructor='courses.period3.instructor'
+                      :url='courses.period3.url'
+          />
+          <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
         </div>
       </el-col>
+
       <el-col :span="5">
         <div class="content-container bg-purple-light">
           <i class="add el-icon-plus"></i>
         </div>
       </el-col>
+
       <el-col :span="5">
         <div class="content-container bg-purple">
           <i class="add el-icon-plus"></i>
         </div>
       </el-col>
     </el-row>
+
+
+    <el-dialog title="講義情報" :visible.sync="dialogVisible">
+      <el-form :model="form">
+        <el-form-item label="科目名">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="講義室">
+          <el-input v-model="form.room" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="指導教員">
+          <el-input v-model="form.instructor" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Zoom URL">
+          <el-input v-model="form.url" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="submit">登録</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -35,19 +76,62 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import CourseCard from './CourseCard.vue'
 
+interface CourseData {
+  [key: string]: {
+    name: string
+    room: string
+    instructor: string
+    url: string
+  }
+}
+
 @Component({
   components: {
     CourseCard,
   },
 })
-export default class Week extends Vue {
+export default class Day extends Vue {
   @Prop() private day!: number
 
   weekDays = ['月', '火', '水', '木', '金']
   weekDaysEn = ['mon', 'tue', 'wed', 'thu', 'fri']
 
+  dialogVisible = false
+
+  form = {
+    name: '',
+    room: '',
+    instructor: '',
+    url: '',
+  }
+
+  editing = ''
+  courses: CourseData = {}
+
   weekStyle(): string {
     return 'day-' + this.weekDaysEn[this.day]
+  }
+
+  showDialog(period: string): void {
+    this.editing = period
+    this.dialogVisible = true
+  }
+
+  submit(): void {
+    Object.keys(this.form).forEach( key => {
+      if(key === 'url') return
+
+      if(this.form[key] === '') this.form[key] = '未設定'
+    })
+
+    this.courses[this.editing] = this.form
+
+    this.editing = ''
+    this.dialogVisible = false
+  }
+
+  existData(period: string): boolean {
+    return period in this.courses
   }
 }
 </script>
@@ -76,10 +160,6 @@ $hover-blue: #49a4ff;
 
 .bg-purple-light .add {
   border: 1px solid darken($purple-light, 30%);
-}
-
-.course-card-container {
-  width: 100%;
 }
 
 .el-col {
@@ -131,6 +211,7 @@ $hover-blue: #49a4ff;
   color: #f3f3f3;
   font-size: 24px;
 }
+
 .day-mon {
   background-color: #db4125;
 }

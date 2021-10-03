@@ -65,7 +65,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component
-export default class WeekHeader extends Vue {}
+export default class DayHeader extends Vue {}
 </script>
 
 <style></style>

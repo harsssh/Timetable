@@ -1,19 +1,20 @@
 <template>
   <div class="time-table-container">
-    <WeekHeader />
-    <Week v-for="day in days" :key="day" :day="day" />
+    <h1>2021 3Q</h1>
+    <DayHeader />
+    <Day v-for="day in days" :key="day" :day="day" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import Week from './Day.vue'
-import WeekHeader from './DayHeader.vue'
+import Day from './Day.vue'
+import DayHeader from './DayHeader.vue'
 
 @Component({
   components: {
-    Week,
-    WeekHeader,
+    Day,
+    DayHeader,
   },
 })
 export default class TimeTable extends Vue {
@@ -22,15 +23,18 @@ export default class TimeTable extends Vue {
 </script>
 
 <style scoped>
-.day-container {
-  margin-bottom: 15px;
+h1 {
+  margin: 0;
 }
 
+.day-container {
+  margin-bottom: 5px;
+}
 .day-container:last-child {
   margin-bottom: 0;
 }
 
 .day-header-container {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 </style>

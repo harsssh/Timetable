@@ -2,7 +2,7 @@
   <div class="course-card-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>授業名</span>
+        <span>{{ name }}</span>
         <el-button style="float: right; padding: 3px 0" type="text"
           >編集</el-button
         >
@@ -10,28 +10,36 @@
 
       <div class="items">
         <div class="text item">
-          <p class="item-header">教室</p>
-          <p>H000</p>
+          <p class="item-header">講義室</p>
+          <p>{{ room }}</p>
         </div>
         <div class="text item">
           <p class="item-header">担当教員</p>
-          <p>野村 千咲</p>
+          <p>{{ instructor }}</p>
         </div>
       </div>
 
+      <el-divider direction="vertical"></el-divider>
+
       <div class="button-container">
-        <el-button type="primary" round>Zoom</el-button>
-        <el-button icon="el-icon-edit" circle></el-button>
+        <el-button type="primary" round :href="url" target="_blank"
+          >参加</el-button
+        >
       </div>
     </el-card>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
-export default class WeekHeader extends Vue {}
+export default class WeekHeader extends Vue {
+  @Prop({required: true}) name: string
+  @Prop({required: true}) room: string
+  @Prop({required: true}) instructor: string
+  @Prop({required: true}) url: string
+}
 </script>
 
 <style>
@@ -41,12 +49,18 @@ export default class WeekHeader extends Vue {}
 </style>
 
 <style scoped>
-.el-button + .el-button {
-  margin-left: 3px;
+.course-card-container {
+  width: 100%;
+  height:100%;
+}
+
+.el-divider {
+  height: auto;
 }
 
 .items {
-  padding: 0 15px;
+  padding-left: 20px;
+  padding-right: 15px;
 }
 
 .items p {
@@ -57,6 +71,8 @@ export default class WeekHeader extends Vue {}
   display: flex;
   justify-content: center;
   align-items: center;
+
+  width: 100%;
 }
 
 .item-header {
