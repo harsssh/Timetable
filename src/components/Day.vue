@@ -15,7 +15,7 @@
             :room.sync="courses.period1.room"
             :instructor.sync="courses.period1.instructor"
             :url.sync="courses.period1.url"
-            @delete='deleteData("period1")'
+            @delete="deleteData('period1')"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period1')"></i>
         </div>
@@ -24,42 +24,42 @@
       <el-col :span="5">
         <div class="content-container bg-purple">
           <CourseCard
-            v-if="existData('period3')"
-            :name="courses.period3.name"
-            :room="courses.period3.room"
-            :instructor="courses.period3.instructor"
-            :url="courses.period3.url"
-            @delete='deleteData("period3")'
+            v-if="existData('period2')"
+            :name="courses.period2.name"
+            :room="courses.period2.room"
+            :instructor="courses.period2.instructor"
+            :url="courses.period2.url"
+            @delete="deleteData('period2')"
           />
-          <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
+          <i v-else class="add el-icon-plus" @click="showDialog('period2')"></i>
         </div>
       </el-col>
 
       <el-col :span="5">
         <div class="content-container bg-purple-light">
           <CourseCard
-            v-if="existData('period5')"
-            :name="courses.period5.name"
-            :room="courses.period5.room"
-            :instructor="courses.period5.instructor"
-            :url="courses.period5.url"
-            @delete='deleteData("period5")'
+            v-if="existData('period3')"
+            :name="courses.period3.name"
+            :room="courses.period3.room"
+            :instructor="courses.period3.instructor"
+            :url="courses.period3.url"
+            @delete="deleteData('period3')"
           />
-          <i v-else class="add el-icon-plus" @click="showDialog('period5')"></i>
+          <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
         </div>
       </el-col>
 
       <el-col :span="5">
         <div class="content-container bg-purple">
           <CourseCard
-            v-if="existData('period7')"
-            :name="courses.period7.name"
-            :room="courses.period7.room"
-            :instructor="courses.period7.instructor"
-            :url="courses.period7.url"
-            @delete='deleteData("period7")'
+            v-if="existData('period4')"
+            :name="courses.period4.name"
+            :room="courses.period4.room"
+            :instructor="courses.period4.instructor"
+            :url="courses.period4.url"
+            @delete="deleteData('period4')"
           />
-          <i v-else class="add el-icon-plus" @click="showDialog('period7')"></i>
+          <i v-else class="add el-icon-plus" @click="showDialog('period4')"></i>
         </div>
       </el-col>
     </el-row>
@@ -117,6 +117,8 @@ export default class Day extends Vue {
   weekDays = ['月', '火', '水', '木', '金']
   weekDaysEn = ['mon', 'tue', 'wed', 'thu', 'fri']
 
+  dayEn = this.weekDaysEn[this.day]
+
   dialogVisible = false
 
   form = {
@@ -129,8 +131,15 @@ export default class Day extends Vue {
   editing = ''
   courses: CourseData = {}
 
+  created() {
+    const store = localStorage.getItem(this.dayEn)
+    if(store) {
+      this.courses = JSON.parse(store)
+    }
+  }
+
   weekStyle(): string {
-    return 'day-' + this.weekDaysEn[this.day]
+    return 'day-' + this.dayEn
   }
 
   showDialog(period: string): void {
@@ -139,12 +148,18 @@ export default class Day extends Vue {
   }
 
   submit(): void {
-    if(this.form.name === '') this.form.name = '未設定'
-    if(this.form.room === '') this.form.room = '未設定'
-    if(this.form.instructor === '') this.form.instructor = '未設定'
+    if (this.form.name === '') this.form.name = '未設定'
+    if (this.form.room === '') this.form.room = '未設定'
+    if (this.form.instructor === '') this.form.instructor = '未設定'
 
     this.courses[this.editing] = { ...this.form }
-    
+
+    // localStorage
+    localStorage.setItem(this.dayEn,
+      JSON.stringify(this.courses)
+    )
+
+    // 初期化
     this.dialogVisible = false
     this.editing = ''
 
@@ -155,7 +170,7 @@ export default class Day extends Vue {
 
     this.$message({
       message: '講義が追加されました。',
-      type: 'success'
+      type: 'success',
     })
   }
 
@@ -166,9 +181,12 @@ export default class Day extends Vue {
   deleteData(period: string): void {
     this.$delete(this.courses, period)
 
+    // localStorage
+    localStorage.setItem(this.dayEn, JSON.stringify(this.courses))
+
     this.$message({
       message: '講義が削除されました。',
-      type: 'success'
+      type: 'success',
     })
   }
 }
