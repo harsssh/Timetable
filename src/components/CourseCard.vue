@@ -22,7 +22,12 @@
       <el-divider direction="vertical"></el-divider>
 
       <div class="button-container">
-        <el-button type="primary" round :href="url" target="_blank"
+        <el-button
+          type="primary"
+          round
+          :href="url"
+          target="_blank"
+          :disabled="isUrlEmpty"
           >参加</el-button
         >
       </div>
@@ -35,10 +40,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class WeekHeader extends Vue {
-  @Prop({required: true}) name: string
-  @Prop({required: true}) room: string
-  @Prop({required: true}) instructor: string
-  @Prop({required: true}) url: string
+  @Prop({ required: true }) name: string
+  @Prop({ required: true }) room: string
+  @Prop({ required: true }) instructor: string
+  @Prop({ required: true }) url: string
+
+  get isUrlEmpty(): boolean {
+    return this.url === ''
+  }
 }
 </script>
 
@@ -51,7 +60,7 @@ export default class WeekHeader extends Vue {
 <style scoped>
 .course-card-container {
   width: 100%;
-  height:100%;
+  height: 100%;
 }
 
 .el-divider {

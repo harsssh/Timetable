@@ -7,25 +7,27 @@
         </div>
       </el-col>
 
-
       <el-col :span="5">
         <div class="content-container bg-purple-light">
           <CourseCard
-            name="科目名"
-            room="H000"
-            instructor="野村 千咲"
-            url="https://google.com"
+            v-if="existData('period1')"
+            :name="courses.period1.name"
+            :room="courses.period1.room"
+            :instructor="courses.period1.instructor"
+            :url="courses.period1.url"
           />
+          <i v-else class="add el-icon-plus" @click="showDialog('period1')"></i>
         </div>
       </el-col>
 
       <el-col :span="5">
         <div class="content-container bg-purple">
-          <CourseCard v-if="existData('period3')"
-                      :name='courses.period3.name'
-                      :room='courses.period3.room'
-                      :instructor='courses.period3.instructor'
-                      :url='courses.period3.url'
+          <CourseCard
+            v-if="existData('period3')"
+            :name="courses.period3.name"
+            :room="courses.period3.room"
+            :instructor="courses.period3.instructor"
+            :url="courses.period3.url"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
         </div>
@@ -33,17 +35,30 @@
 
       <el-col :span="5">
         <div class="content-container bg-purple-light">
-          <i class="add el-icon-plus"></i>
+          <CourseCard
+            v-if="existData('period5')"
+            :name="courses.period5.name"
+            :room="courses.period5.room"
+            :instructor="courses.period5.instructor"
+            :url="courses.period5.url"
+          />
+          <i v-else class="add el-icon-plus" @click="showDialog('period5')"></i>
         </div>
       </el-col>
 
       <el-col :span="5">
         <div class="content-container bg-purple">
-          <i class="add el-icon-plus"></i>
+          <CourseCard
+            v-if="existData('period7')"
+            :name="courses.period7.name"
+            :room="courses.period7.room"
+            :instructor="courses.period7.instructor"
+            :url="courses.period7.url"
+          />
+          <i v-else class="add el-icon-plus" @click="showDialog('period7')"></i>
         </div>
       </el-col>
     </el-row>
-
 
     <el-dialog title="講義情報" :visible.sync="dialogVisible">
       <el-form :model="form">
@@ -118,10 +133,10 @@ export default class Day extends Vue {
   }
 
   submit(): void {
-    Object.keys(this.form).forEach( key => {
-      if(key === 'url') return
+    Object.keys(this.form).forEach((key) => {
+      if (key === 'url') return
 
-      if(this.form[key] === '') this.form[key] = '未設定'
+      if (this.form[key] === '') this.form[key] = '未設定'
     })
 
     this.courses[this.editing] = this.form
