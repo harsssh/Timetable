@@ -3,7 +3,10 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>{{ name }}</span>
-        <el-button style="float: right; padding: 3px 0" type="text"
+        <el-button
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="dialogVisible = true"
           >編集</el-button
         >
       </div>
@@ -28,10 +31,36 @@
           :href="url"
           target="_blank"
           :disabled="isUrlEmpty"
+          @click="joinZoom"
           >参加</el-button
         >
       </div>
     </el-card>
+
+    <el-dialog title="講義情報" :visible.sync="dialogVisible">
+      <el-form :model="editForm">
+        <el-form-item label="科目名">
+          <el-input v-model="editForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="講義室">
+          <el-input v-model="editForm.room" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="指導教員">
+          <el-input v-model="editForm.instructor" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Zoom URL">
+          <el-input v-model="editForm.url" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="editSubmit">登録</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -39,14 +68,36 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
-export default class WeekHeader extends Vue {
-  @Prop({ required: true }) name: string
-  @Prop({ required: true }) room: string
-  @Prop({ required: true }) instructor: string
-  @Prop({ required: true }) url: string
+export default class CourseCard extends Vue {
+  @Prop({ required: true }) name!: string
+  @Prop({ required: true }) room!: string
+  @Prop({ required: true }) instructor!: string
+  @Prop({ required: true }) url!: string
+
+  dialogVisible = false
+
+  editForm = {
+    name: this.name,
+    room: this.room,
+    instructor: this.instructor,
+    url: this.url,
+  }
 
   get isUrlEmpty(): boolean {
     return this.url === ''
+  }
+
+  editSubmit(): void {
+    this.$emit('update:name', this.editForm.name)
+    this.$emit('update:room', this.editForm.room)
+    this.$emit('update:instructor', this.editForm.instructor)
+    this.$emit('update:url', this.editForm.url)
+
+    this.dialogVisible = false
+  }
+
+  joinZoom(): void {
+    window.open(this.url, '_blank')
   }
 }
 </script>

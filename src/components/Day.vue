@@ -11,10 +11,10 @@
         <div class="content-container bg-purple-light">
           <CourseCard
             v-if="existData('period1')"
-            :name="courses.period1.name"
-            :room="courses.period1.room"
-            :instructor="courses.period1.instructor"
-            :url="courses.period1.url"
+            :name.sync="courses.period1.name"
+            :room.sync="courses.period1.room"
+            :instructor.sync="courses.period1.instructor"
+            :url.sync="courses.period1.url"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period1')"></i>
         </div>
