@@ -92,13 +92,9 @@ export default class CourseCard extends Vue {
     this.$emit('update:room', this.editForm.room)
     this.$emit('update:instructor', this.editForm.instructor)
     this.$emit('update:url', this.editForm.url)
+    this.$emit('update')
 
     this.dialogVisible = false
-
-    this.$message({
-      message: '講義情報を更新しました。',
-      type: 'success',
-    })
   }
 
   joinZoom(): void {

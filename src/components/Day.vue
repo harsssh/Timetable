@@ -16,6 +16,7 @@
             :instructor.sync="courses.period1.instructor"
             :url.sync="courses.period1.url"
             @delete="deleteData('period1')"
+            @update="updateData"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period1')"></i>
         </div>
@@ -25,11 +26,12 @@
         <div class="content-container bg-purple">
           <CourseCard
             v-if="existData('period2')"
-            :name="courses.period2.name"
-            :room="courses.period2.room"
-            :instructor="courses.period2.instructor"
-            :url="courses.period2.url"
+            :name.sync="courses.period2.name"
+            :room.sync="courses.period2.room"
+            :instructor.sync="courses.period2.instructor"
+            :url.sync="courses.period2.url"
             @delete="deleteData('period2')"
+            @update="updateData"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period2')"></i>
         </div>
@@ -39,11 +41,12 @@
         <div class="content-container bg-purple-light">
           <CourseCard
             v-if="existData('period3')"
-            :name="courses.period3.name"
-            :room="courses.period3.room"
-            :instructor="courses.period3.instructor"
-            :url="courses.period3.url"
+            :name.sync="courses.period3.name"
+            :room.sync="courses.period3.room"
+            :instructor.sync="courses.period3.instructor"
+            :url.sync="courses.period3.url"
             @delete="deleteData('period3')"
+            @update="updateData"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period3')"></i>
         </div>
@@ -53,11 +56,12 @@
         <div class="content-container bg-purple">
           <CourseCard
             v-if="existData('period4')"
-            :name="courses.period4.name"
-            :room="courses.period4.room"
-            :instructor="courses.period4.instructor"
-            :url="courses.period4.url"
+            :name.sync="courses.period4.name"
+            :room.sync="courses.period4.room"
+            :instructor.sync="courses.period4.instructor"
+            :url.sync="courses.period4.url"
             @delete="deleteData('period4')"
+            @update="updateData"
           />
           <i v-else class="add el-icon-plus" @click="showDialog('period4')"></i>
         </div>
@@ -131,9 +135,9 @@ export default class Day extends Vue {
   editing = ''
   courses: CourseData = {}
 
-  created() {
+  created(): void {
     const store = localStorage.getItem(this.dayEn)
-    if(store) {
+    if (store) {
       this.courses = JSON.parse(store)
     }
   }
@@ -155,9 +159,7 @@ export default class Day extends Vue {
     this.courses[this.editing] = { ...this.form }
 
     // localStorage
-    localStorage.setItem(this.dayEn,
-      JSON.stringify(this.courses)
-    )
+    localStorage.setItem(this.dayEn, JSON.stringify(this.courses))
 
     // 初期化
     this.dialogVisible = false
@@ -186,6 +188,15 @@ export default class Day extends Vue {
 
     this.$message({
       message: '講義が削除されました。',
+      type: 'success',
+    })
+  }
+
+  updateData(): void {
+    localStorage.setItem(this.dayEn, JSON.stringify(this.courses))
+
+    this.$message({
+      message: '講義情報を更新しました。',
       type: 'success',
     })
   }
