@@ -1,4 +1,5 @@
 # timetable
+Deployed in Vercel → https://timetable-livid.vercel.app/
 
 ## Project setup
 ```
