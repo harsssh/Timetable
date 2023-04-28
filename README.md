@@ -1,6 +1,8 @@
 # timetable
 Deployed in Vercel → https://timetable-livid.vercel.app/
 
+![](fig/timetable.png)
+
 ## Project setup
 ```
 npm install
